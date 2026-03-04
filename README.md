@@ -190,3 +190,24 @@ docker run --rm -p 8080:8080 \
 - **1800+ deploys on Railway and counting** [Link to template on Railway](https://railway.com/deploy/clawdbot-railway-template)
 
 ![Railway template deploy count](assets/railway-deploys.jpg)
+
+
+### "origin not allowed" / Control UI WebSocket blocked
+
+Recent openclaw releases check that the browser's `Origin` header matches the gateway host or an explicit allowlist.
+
+This template automatically adds `https://<your-app>.up.railway.app` (from Railway's `RAILWAY_PUBLIC_DOMAIN` env var) to `gateway.controlUi.allowedOrigins` on startup, so the default Railway domain works out of the box.
+
+If you use a **custom domain**, add it to the Railway Variables:
+
+```
+OPENCLAW_CONTROL_UI_ALLOWED_ORIGINS=https://my-custom-domain.example.com
+```
+
+Multiple origins are comma-separated:
+
+```
+OPENCLAW_CONTROL_UI_ALLOWED_ORIGINS=https://my-custom-domain.example.com,https://other.example.com
+```
+
+Then redeploy (or restart) so the wrapper patches the config before the gateway starts.
